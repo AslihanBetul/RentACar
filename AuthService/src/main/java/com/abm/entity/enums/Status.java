@@ -1,6 +1,6 @@
 package com.abm.entity.enums;
 
-public enum AuthStatus {
+public enum Status {
     ACTIVE,
     BANNED,
     DELETED,

@@ -1,20 +1,21 @@
 package com.abm.service;
 
+import com.abm.config.model.UserSaveModel;
 import com.abm.dto.request.AccountActivationRequestDto;
 import com.abm.dto.request.AuthRegisterDto;
 import com.abm.dto.request.LoginRequestDto;
 import com.abm.dto.request.RepasswordRequestDto;
 import com.abm.entity.Auth;
-import com.abm.entity.enums.AuthStatus;
+import com.abm.entity.enums.Status;
 import com.abm.exception.AuthServiceException;
 import  static com.abm.exception.ErrorType.*;
 
-import com.abm.exception.ErrorType;
 import com.abm.mapper.AuthMapper;
 import com.abm.repository.AuthRepository;
 import com.abm.utility.CodeGenerator;
 import com.abm.utility.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +24,7 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final CodeGenerator codeGenerator;
     private final JwtTokenManager jwtTokenManager;
+    private final RabbitTemplate rabbitTemplate;
 
     public String register(AuthRegisterDto authRegisterDto) {
 confirmPassword(authRegisterDto.getPassword(), authRegisterDto.getConfirmPassword());
@@ -33,9 +35,10 @@ checkUsernameExist(authRegisterDto.getUsername());
         if (saved.getId()==null){
             throw new AuthServiceException(ACCOUNT_CREATION_FAILED);
 
-
         }
-  return "Account created successfully. Please check your email for activation code";
+        UserSaveModel model = UserSaveModel.builder().authId(saved.getId()).email(saved.getEmail()).build();
+        rabbitTemplate.convertAndSend("directExchange","keyUserSave",model);
+        return "Account created successfully. Please check your email for activation code";
     }
 
     private void confirmPassword(String password, String confirmPassword) {
@@ -54,7 +57,7 @@ checkUsernameExist(authRegisterDto.getUsername());
         Auth auth = checkAuthByUsernameAndPassword(accountActivationRequestDto.getUsername(), accountActivationRequestDto.getPassword());
        isAccountActivatable(auth);
         isActivationCodeCorrect(auth,accountActivationRequestDto);
-        auth.setAuthStatus(AuthStatus.ACTIVE);
+        auth.setAuthStatus(Status.ACTIVE);
         authRepository.save(auth);
         return "Account activated successfully";
     }
@@ -66,14 +69,14 @@ checkUsernameExist(authRegisterDto.getUsername());
 
     }
     private void isAccountActivatable(Auth auth) {
-        System.out.println("deneme");
-        if(auth.getAuthStatus().equals(AuthStatus.ACTIVE)) {
+
+        if(auth.getAuthStatus().equals(Status.ACTIVE)) {
             throw new AuthServiceException(ACCOUNT_ALREADY_ACTIVATED);
         }
-        if((auth.getAuthStatus().equals(AuthStatus.BANNED))){
+        if((auth.getAuthStatus().equals(Status.BANNED))){
             throw new AuthServiceException(ACCOUNT_IS_BANNED);
         }
-        if((auth.getAuthStatus().equals(AuthStatus.DELETED))){
+        if((auth.getAuthStatus().equals(Status.DELETED))){
             throw new AuthServiceException(ACCOUNT_IS_DELETED);
 
         }
@@ -90,7 +93,7 @@ checkUsernameExist(authRegisterDto.getUsername());
     public String login(LoginRequestDto loginRequestDto) {
         Auth auth = authRepository.findOptionalByEmailAndPassword(loginRequestDto.getEmail(), loginRequestDto.getPassword())
                 .orElseThrow(() -> new AuthServiceException(EMAIL_OR_PASSWORD_WRONG));
-        if (!auth.getAuthStatus().equals(AuthStatus.ACTIVE)){
+        if (!auth.getAuthStatus().equals(Status.ACTIVE)){
             throw new AuthServiceException(ACCOUNT_IS_NOT_ACTIVE);
         }
         return jwtTokenManager.createToken(auth).orElseThrow(() -> new AuthServiceException(TOKEN_CREATION_FAILED));

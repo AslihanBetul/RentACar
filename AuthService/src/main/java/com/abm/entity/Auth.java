@@ -1,7 +1,7 @@
 package com.abm.entity;
 
 import com.abm.entity.enums.AuthRole;
-import com.abm.entity.enums.AuthStatus;
+import com.abm.entity.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class Auth {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    AuthStatus authStatus=AuthStatus.PENDING;
+    Status authStatus= Status.PENDING;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

@@ -5,4 +5,5 @@ dependencies {
     implementation libs.validator
     runtimeOnly libs.postgresql
     implementation libs.springCloudConfigClient
+   implementation libs.springCloudAmqp
 }
