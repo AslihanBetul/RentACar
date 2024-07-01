@@ -66,6 +66,7 @@ checkUsernameExist(authRegisterDto.getUsername());
 
     }
     private void isAccountActivatable(Auth auth) {
+        System.out.println("deneme");
         if(auth.getAuthStatus().equals(AuthStatus.ACTIVE)) {
             throw new AuthServiceException(ACCOUNT_ALREADY_ACTIVATED);
         }
@@ -74,9 +75,11 @@ checkUsernameExist(authRegisterDto.getUsername());
         }
         if((auth.getAuthStatus().equals(AuthStatus.DELETED))){
             throw new AuthServiceException(ACCOUNT_IS_DELETED);
+
         }
 
     }
+
 
 
     private Auth checkAuthByUsernameAndPassword(String username, String password){
