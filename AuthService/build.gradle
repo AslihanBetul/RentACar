@@ -1,0 +1,8 @@
+dependencies {
+
+    implementation libs. springBootDataJpa
+    implementation libs.jwt
+    implementation libs.validator
+    runtimeOnly libs.postgresql
+    implementation libs.springCloudConfigClient
+}
