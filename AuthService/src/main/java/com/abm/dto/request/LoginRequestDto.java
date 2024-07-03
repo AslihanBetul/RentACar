@@ -17,6 +17,6 @@ public class LoginRequestDto {
     @Email
     private String email;
     @NotBlank(message = "şifreniz boş olamaz")
-    @Length(min = 8,max = 25)
+
     private String  password;
 }

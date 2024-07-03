@@ -20,16 +20,16 @@ public class Auth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
-    @Column(unique = true)
+  //  @Column(unique = true)
     @Length(min = 3,max = 30)
     private String  username;
-    @Length(min = 8,max = 25)
+    @Length(min = 4,max = 25)
     private String  password;
-    @Column(unique = true)
+
     @Email
     private String email;
     private String activationCode;
-    private String rePasswordCode;
+    private String confirmPassword;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

@@ -1,0 +1,21 @@
+server:
+  port: 9092
+
+spring:
+   rabbitmq:
+      host: localhost
+      port: 5672
+      username: java14user
+      password: root
+   mail:
+    host: smtp.gmail.com
+    port: 587
+    username: aslihan.mert19@gmail.com
+    password: mwum xcwi qble kyrc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+

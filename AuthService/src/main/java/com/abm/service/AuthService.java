@@ -1,5 +1,6 @@
 package com.abm.service;
 
+import com.abm.config.model.MailActivationModel;
 import com.abm.config.model.UserSaveModel;
 import com.abm.dto.request.AccountActivationRequestDto;
 import com.abm.dto.request.AuthRegisterDto;
@@ -27,8 +28,8 @@ public class AuthService {
     private final RabbitTemplate rabbitTemplate;
 
     public String register(AuthRegisterDto authRegisterDto) {
-confirmPassword(authRegisterDto.getPassword(), authRegisterDto.getConfirmPassword());
-checkUsernameExist(authRegisterDto.getUsername());
+       confirmPassword(authRegisterDto.getPassword(), authRegisterDto.getConfirmPassword());
+      checkUsernameExist(authRegisterDto.getUsername());
         Auth auth = AuthMapper.INSTANCE.authRegisterDtoToAuth(authRegisterDto);
         auth.setActivationCode(codeGenerator.codeGenerator());
         Auth saved = authRepository.save(auth);
@@ -37,8 +38,13 @@ checkUsernameExist(authRegisterDto.getUsername());
 
         }
         UserSaveModel model = UserSaveModel.builder().authId(saved.getId()).email(saved.getEmail()).build();
+        MailActivationModel mailmodel = MailActivationModel.builder().email(saved.getEmail()).activationCode(saved.getActivationCode()).build();
         rabbitTemplate.convertAndSend("directExchange","keyUserSave",model);
+        rabbitTemplate.convertAndSend("directExchange","keyActivation",mailmodel);
+
         return "Account created successfully. Please check your email for activation code";
+
+
     }
 
     private void confirmPassword(String password, String confirmPassword) {
@@ -82,7 +88,6 @@ checkUsernameExist(authRegisterDto.getUsername());
         }
 
     }
-
 
 
     private Auth checkAuthByUsernameAndPassword(String username, String password){

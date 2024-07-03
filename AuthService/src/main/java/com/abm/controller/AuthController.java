@@ -19,14 +19,17 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(REGISTER)
+    @CrossOrigin("*")
     public ResponseEntity<String>register(@RequestBody AuthRegisterDto authRegisterDto){
         return ResponseEntity.ok(authService.register(authRegisterDto));
     }
     @PutMapping(VERIFY_ACCOUNT)
+    @CrossOrigin("*")
     public ResponseEntity<String> verifyAccount(@RequestBody  @Valid AccountActivationRequestDto accountActivationRequestDto){
         return ResponseEntity.ok(authService.verifyAccount(accountActivationRequestDto));
     }
     @PostMapping(LOGIN)
+    @CrossOrigin("*")
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
         return ResponseEntity.ok(authService.login(loginRequestDto));
     }

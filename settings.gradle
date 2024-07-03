@@ -2,4 +2,5 @@ rootProject.name = 'RentACar'
 include 'AuthService'
 include 'UserService'
 include 'ConfigServer'
+include 'MailService'
 

@@ -20,7 +20,7 @@ public class AuthRegisterDto {
     @Length(min = 3,max = 30)
     private String  username;
     @NotBlank(message = "şifreniz boş olamaz")
-    @Length(min = 8,max = 25)
+
     private String  password;
     @NotBlank(message = "şifreniz boş olamaz")
     @Length(min = 8,max = 25)
