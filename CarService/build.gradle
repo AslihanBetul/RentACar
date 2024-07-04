@@ -1,0 +1,6 @@
+dependencies {
+    implementation libs.springBootDataMongo
+    implementation libs. springCloudConfig
+    implementation libs.springCloudAmqp
+
+}

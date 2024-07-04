@@ -1,0 +1,21 @@
+server:
+  port: 9093
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: java14user
+    password: root
+  data:
+    mongodb:
+      host: localhost
+      port: 27027
+      database: CarDB
+      username: bilge
+      password: bilge!123
+
+userservice:
+  secret:
+    secret-key: ${JAVA14_SECRET_KEY}
+    issuer: ${JAVA14_ISSUER}
