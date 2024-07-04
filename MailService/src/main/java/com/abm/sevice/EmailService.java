@@ -25,6 +25,16 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    @RabbitListener(queues = "queueActivationUpdate")
+    public void sendUpdateEmail(MailActivationModel mailActivationModel){
+        SimpleMailMessage message=new SimpleMailMessage();
+        message.setTo(mailActivationModel.getEmail());
+        message.setSubject("your activation code");
+        message.setText("activation code"+mailActivationModel.getActivationCode());
+        mailSender.send(message);
+    }
+
+
 
 
 

@@ -16,9 +16,9 @@ public class RepasswordRequestDto {
     @NotBlank(message = "Email boş olamaz")
     @Email
     private String email;
-    String rePasswordCode;
+    String activationCode;
     @NotBlank(message = "şifreniz boş olamaz")
-    @Length(min = 8,max = 25)
+    @Length(min = 4,max = 25)
     private String  password;
     @NotBlank(message = "şifreniz boş olamaz")
     String confirmPassword;

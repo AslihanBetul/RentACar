@@ -18,6 +18,8 @@ public class Config {
     private final String keyUserSave = "keyUserSave";
     private final String queueActivation = "queueActivation";
     private final String keyActivation = "keyActivation";
+    private final String queueActivationUpdate = "queueActivationUpdate";
+    private final String keyActivationUpdate = "keyActivationUpdate";
 
     @Bean
     public DirectExchange directExchange() {
@@ -30,6 +32,14 @@ public class Config {
     @Bean
     public Queue queueActivation() {
     return new Queue(queueActivation);
+    }
+    @Bean
+    public Queue queueActivationUpdate() {
+        return new Queue(queueActivationUpdate);
+    }
+    @Bean
+    public Binding bindingActivationUpdate(Queue queueActivationUpdate, DirectExchange directExchange) {
+        return BindingBuilder.bind(queueActivationUpdate).to(directExchange).with(keyActivationUpdate);
     }
 
     @Bean

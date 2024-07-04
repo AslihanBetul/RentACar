@@ -115,17 +115,20 @@ public class AuthService {
         Auth auth = authRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new AuthServiceException(EMAIL_NOT_FOUND));
         auth.setActivationCode(codeGenerator.codeGenerator());
-        authRepository.save(auth);
+        Auth saved = authRepository.save(auth);
+        MailActivationModel mailmodel = MailActivationModel.builder().email(saved.getEmail()).activationCode(saved.getActivationCode()).build();
+        rabbitTemplate.convertAndSend("directExchange","keyActivationUpdate",mailmodel);
         return "Check your email for new password";
     }
 
     public void updatePassword(RepasswordRequestDto repasswordRequestDto) {
-        Auth auth = authRepository.findOptionalByEmailAndPassword(repasswordRequestDto.getEmail(), repasswordRequestDto.getRePasswordCode()).orElseThrow(() -> new AuthServiceException(REPASSWORDCODE_OR_EMAIL_WRONG));
+        Auth auth = authRepository.findOptionalByEmailAndActivationCode(repasswordRequestDto.getEmail(), repasswordRequestDto.getActivationCode()).orElseThrow(() -> new AuthServiceException(REPASSWORDCODE_OR_EMAIL_WRONG));
         if (!repasswordRequestDto.getPassword().equals(repasswordRequestDto.getConfirmPassword())) {
             throw new AuthServiceException(PASSWORD_MISMATCH);
 
         }
         auth.setPassword(repasswordRequestDto.getPassword());
+        auth.setConfirmPassword(repasswordRequestDto.getConfirmPassword());
         authRepository.save(auth);
     }
 }
