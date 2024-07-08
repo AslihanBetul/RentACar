@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class RentSaveDto {
     private String carId;
     private String userId;
-    private Long rentDate;
-    private Long returnDate;
+    private String rentDate;
+    private String returnDate;
 }

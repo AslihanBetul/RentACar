@@ -27,6 +27,10 @@ public class CarService {
         carRepository.save(car);
         return "Car saved";
     }
+    public String save(Car car){
+        carRepository.save(car);
+        return "Car saved";
+    }
 
     public void update(Double price,String id) {
         Car car = carRepository.findById(id)
@@ -35,5 +39,10 @@ public class CarService {
         car.setPricePerDay(price);
 
         carRepository.save(car);
+    }
+
+    public Car findById(String carId) {
+        return carRepository.findById(carId).orElse(null);
+
     }
 }

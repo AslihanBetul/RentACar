@@ -17,7 +17,7 @@ public class Rent {
     private String id;
     private String carId;
     private String userId;
-    private Long rentDate;
-    private Long returnDate;
+    private String rentDate;
+    private String returnDate;
     private Double totalPrice;
 }
