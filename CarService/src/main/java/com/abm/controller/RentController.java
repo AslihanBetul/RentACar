@@ -1,17 +1,14 @@
 package com.abm.controller;
 
-import com.abm.dto.request.CarSaveDto;
-import com.abm.dto.request.RentSaveDto;
-import com.abm.service.CarService;
+
+import com.abm.request.RentSaveDto;
 import com.abm.service.RentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.abm.constant.EndPoints.*;
+import static com.abm.constant.EndPoints.RENT;
+import static com.abm.constant.EndPoints.SAVE;
 
 @RequiredArgsConstructor
 @RequestMapping(RENT)
@@ -20,7 +17,7 @@ public class RentController {
     private final RentService rentService;
 
     @PostMapping(SAVE)
-    public ResponseEntity<String> save(@RequestBody RentSaveDto dto){
-        return ResponseEntity.ok(rentService.save(dto));
+    public ResponseEntity<String> save(@RequestBody RentSaveDto dto, @RequestParam String token){
+        return ResponseEntity.ok(rentService.save(dto,token));
     }
 }

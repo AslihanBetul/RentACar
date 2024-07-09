@@ -1,6 +1,5 @@
 package com.abm.repository;
 
-import com.abm.dto.request.LoginRequestDto;
 import com.abm.entity.Auth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

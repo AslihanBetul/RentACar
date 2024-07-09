@@ -15,7 +15,7 @@ spring:
       username: bilge
       password: bilge!123
 
-userservice:
+authservice:
   secret:
     secret-key: ${JAVA14_SECRET_KEY}
     issuer: ${JAVA14_ISSUER}

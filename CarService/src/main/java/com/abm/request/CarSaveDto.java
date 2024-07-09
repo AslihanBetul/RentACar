@@ -1,4 +1,4 @@
-package com.abm.dto.request;
+package com.abm.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

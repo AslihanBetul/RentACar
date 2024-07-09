@@ -1,16 +1,16 @@
 package com.abm.controller;
 
-import  static com.abm.constant.EndPoints.*;
-
-import com.abm.dto.request.AccountActivationRequestDto;
-import com.abm.dto.request.AuthRegisterDto;
-import com.abm.dto.request.LoginRequestDto;
-import com.abm.dto.request.RepasswordRequestDto;
+import com.abm.request.AccountActivationRequestDto;
+import com.abm.request.AuthRegisterDto;
+import com.abm.request.LoginRequestDto;
+import com.abm.request.RepasswordRequestDto;
 import com.abm.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.abm.constant.EndPoints.*;
 
 @RestController
 @RequiredArgsConstructor

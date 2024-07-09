@@ -1,4 +1,4 @@
-package com.abm.dto.request;
+package com.abm.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class RentSaveDto {
     private String carId;
-    private String userId;
+
     private String rentDate;
     private String returnDate;
 }

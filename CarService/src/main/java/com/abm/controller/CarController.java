@@ -1,13 +1,13 @@
 package com.abm.controller;
 
-import static com.abm.constant.EndPoints.*;
 
-import com.abm.dto.request.CarSaveDto;
+import com.abm.request.CarSaveDto;
 import com.abm.service.CarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.abm.constant.EndPoints.*;
 
 @RequiredArgsConstructor
 @RequestMapping(CAR)

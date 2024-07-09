@@ -2,22 +2,23 @@ package com.abm.service;
 
 import com.abm.config.model.MailActivationModel;
 import com.abm.config.model.UserSaveModel;
-import com.abm.dto.request.AccountActivationRequestDto;
-import com.abm.dto.request.AuthRegisterDto;
-import com.abm.dto.request.LoginRequestDto;
-import com.abm.dto.request.RepasswordRequestDto;
+
 import com.abm.entity.Auth;
 import com.abm.entity.enums.Status;
 import com.abm.exception.AuthServiceException;
-import  static com.abm.exception.ErrorType.*;
-
 import com.abm.mapper.AuthMapper;
 import com.abm.repository.AuthRepository;
+import com.abm.request.AccountActivationRequestDto;
+import com.abm.request.AuthRegisterDto;
+import com.abm.request.LoginRequestDto;
+import com.abm.request.RepasswordRequestDto;
 import com.abm.utility.CodeGenerator;
 import com.abm.utility.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import static com.abm.exception.ErrorType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +29,8 @@ public class AuthService {
     private final RabbitTemplate rabbitTemplate;
 
     public String register(AuthRegisterDto authRegisterDto) {
-       confirmPassword(authRegisterDto.getPassword(), authRegisterDto.getConfirmPassword());
-      checkUsernameExist(authRegisterDto.getUsername());
+        confirmPassword(authRegisterDto.getPassword(), authRegisterDto.getConfirmPassword());
+        checkUsernameExist(authRegisterDto.getUsername());
         Auth auth = AuthMapper.INSTANCE.authRegisterDtoToAuth(authRegisterDto);
         auth.setActivationCode(codeGenerator.codeGenerator());
         Auth saved = authRepository.save(auth);
@@ -67,7 +68,7 @@ public class AuthService {
         authRepository.save(auth);
         return "Account activated successfully";
     }
-    private void isActivationCodeCorrect(Auth auth ,AccountActivationRequestDto accountActivationRequestDto){
+    private void isActivationCodeCorrect(Auth auth , AccountActivationRequestDto accountActivationRequestDto){
         if(!auth.getActivationCode().equals(accountActivationRequestDto.getActivationCode())){
             throw new AuthServiceException(ACTIVATION_CODE_WRONG);
         }

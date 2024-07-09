@@ -1,12 +1,11 @@
 package com.abm.service;
 
-import com.abm.dto.request.CarSaveDto;
-import com.abm.dto.request.RentSaveDto;
 import com.abm.entity.Car;
 import com.abm.entity.CarStatus;
 import com.abm.entity.Rent;
-import com.abm.repository.CarRepository;
+import com.abm.manager.UserManager;
 import com.abm.repository.RentRepository;
+import com.abm.request.RentSaveDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +18,15 @@ import java.time.temporal.ChronoUnit;
 public class RentService {
     private final RentRepository rentRepository;
     private final CarService carService;
+    private final UserManager userManager;
 
 
-    public String save(RentSaveDto dto) {
+    public String save(RentSaveDto dto,String token) {
+        String userId = userManager.createUserId(token);
         double carPrice = getCarPrice(dto.getCarId(),dto.getRentDate(), dto.getReturnDate());
         Rent rent =Rent.builder()
                 .carId(dto.getCarId())
-                .userId(dto.getUserId())
+                .userId(userId)
                 .rentDate(dto.getRentDate())
                 .returnDate(dto.getReturnDate())
                 .totalPrice(carPrice)
@@ -35,6 +36,7 @@ public class RentService {
         car.setCarStatus(CarStatus.RENTED);
 
       carService.save(car);
+       rentRepository.save(rent);
         return "Car rentted successfully car price="+carPrice;
     }
 

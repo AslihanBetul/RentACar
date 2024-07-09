@@ -1,4 +1,4 @@
-package com.abm.dto.request;
+package com.abm.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,17 +12,14 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @Builder
 @Data
-public class AuthRegisterDto {
+public class RepasswordRequestDto {
     @NotBlank(message = "Email boş olamaz")
     @Email
     private String email;
-    @NotBlank(message = "kullanıcı adınız boş olamaz")
-    @Length(min = 3,max = 30)
-    private String  username;
+    String activationCode;
     @NotBlank(message = "şifreniz boş olamaz")
-
+    @Length(min = 4,max = 25)
     private String  password;
     @NotBlank(message = "şifreniz boş olamaz")
-    @Length(min = 8,max = 25)
-    private String  confirmPassword;
+    String confirmPassword;
 }

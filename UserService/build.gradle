@@ -3,4 +3,6 @@ dependencies {
     implementation libs. springCloudConfig
     implementation libs.springCloudAmqp
     implementation libs.jwt
+    implementation libs.springCloudOpenFeign
+    implementation libs.springCloudConfigClient
 }
