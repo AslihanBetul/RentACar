@@ -1,4 +1,4 @@
-package com.abm.config;
+package com.abm.config.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -4,5 +4,8 @@ dependencies {
     implementation libs.springCloudConfig
     implementation libs.springCloudAmqp
     implementation libs.springBootMail
+    implementation libs.springCloudOpenFeign
+    implementation libs.springCloudConfigClient
+
 
 }
