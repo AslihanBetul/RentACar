@@ -5,6 +5,8 @@ import com.abm.dto.response.RentResponseDto;
 import com.abm.entity.Car;
 import com.abm.entity.CarStatus;
 import com.abm.entity.Rent;
+import com.abm.exception.CarServiceException;
+import com.abm.exception.ErrorType;
 import com.abm.manager.UserManager;
 import com.abm.repository.RentRepository;
 import com.abm.request.RentSaveDto;
@@ -29,6 +31,7 @@ public class RentService {
 
     public String save(RentSaveDto dto,String token) {
         String userId = userManager.createUserId(token);
+
         double carPrice = getCarPrice(dto.getCarId(),dto.getRentDate(), dto.getReturnDate());
         Rent rent =Rent.builder()
                 .carId(dto.getCarId())
@@ -39,11 +42,14 @@ public class RentService {
                 .build();
 
         Car car = carService.findById(dto.getCarId());
+        if (car.getCarStatus() == CarStatus.RENTED)  {
+            throw new CarServiceException(ErrorType.CAR_ALREADY_RENTED);
+        }
         car.setCarStatus(CarStatus.RENTED);
 
       carService.save(car);
        rentRepository.save(rent);
-       InfoCustomerModel customerModel = InfoCustomerModel.builder().name(car.getName()).userId(rent.getUserId()).brand(car.getBrand()).model(car.getModel()).plate(car.getPlate()).rentDate(rent.getRentDate()).returnDate(rent.getReturnDate()).totalPrice(rent.getTotalPrice()).build();
+       InfoCustomerModel customerModel = InfoCustomerModel.builder().name(car.getName()).userId(rent.getUserId()).brand(car.getBrand()).model(car.getModel()).plate(car.getPlate()).rentDate(rent.getRentDate()).returnDate(rent.getReturnDate()).totalPrice(rent.getTotalPrice()).imageUrl(car.getImageUrl()).build();
         rabbitTemplate.convertAndSend("directExchange","keyCustomerInfo", customerModel);
         return "Car rentted successfully car price="+carPrice;
     }

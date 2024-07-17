@@ -3,6 +3,7 @@ package com.abm.service;
 import com.abm.config.model.UserSaveModel;
 
 import com.abm.dto.response.RentResponseDto;
+import com.abm.dto.response.UpdateUserDto;
 import com.abm.dto.response.UserDto;
 import com.abm.entity.enums.User;
 import com.abm.manager.RentManager;
@@ -47,6 +48,15 @@ public class UserService {
     public UserDto findByUserId(String userId) {
 
         User user = userRepository.findById(userId).orElseThrow();
-        return UserDto.builder().name(user.getName()).Lastname(user.getLastname()).email(user.getEmail()).build();
+        UserDto build = UserDto.builder().name(user.getName()).Lastname(user.getLastname()).email(user.getEmail()).build();
+        return build;
+    }
+
+    public void updateUser(String token, UpdateUserDto userDto) {
+    Long authId = jwtTokenManager.getAuthIdFromToken(token).orElseThrow();
+    User user = userRepository.findByAuthId(authId);
+    user.setName(userDto.getName());
+    user.setLastname(userDto.getLastname());
+    userRepository.save(user);
     }
 }

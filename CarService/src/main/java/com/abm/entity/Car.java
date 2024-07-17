@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.awt.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,6 +27,7 @@ public class Car {
     private Double pricePerDay;
     private String sasiNo;
     private String imageUrl;
+
     @Builder.Default
     private CarStatus carStatus = CarStatus.AVAILABLE;
 

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,6 +20,8 @@ public class InfoCustomerModel {
     private String rentDate;
     private String returnDate;
     private Double totalPrice;
+    private String imageUrl;
+
 
 
 

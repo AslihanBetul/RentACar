@@ -1,6 +1,7 @@
 package com.abm.controller;
 
 import com.abm.dto.response.RentResponseDto;
+import com.abm.dto.response.UpdateUserDto;
 import com.abm.dto.response.UserDto;
 import com.abm.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,12 @@ public class UserController {
     @GetMapping("/findbyuserId")
     public ResponseEntity<UserDto> findByUserId(@RequestParam String userId) {
         return ResponseEntity.ok(userService.findByUserId(userId));
+    }
+
+    @PostMapping("/updateUser")
+    public ResponseEntity<String> updateUser(@RequestParam String token, @RequestBody UpdateUserDto userDto){
+        userService.updateUser(token, userDto);
+        return ResponseEntity.ok("User updated successfully");
     }
 
 

@@ -44,9 +44,12 @@ public class EmailService {
         ResponseEntity<UserDto> userDto = userManager.findByUserId(model.getUserId());
 
         SimpleMailMessage message=new SimpleMailMessage();
-        assert userDto != null;
-        message.setTo(userDto.getBody().getEmail());
-        message.setSubject("Dear "+userDto.getBody().getName()+"  "+userDto.getBody().getLastname());
+        if(userDto.getBody() != null) {
+            message.setTo(userDto.getBody().getEmail());
+            message.setSubject("Dear "+userDto.getBody().getName()+"  "+userDto.getBody().getLastname());
+        }
+
+
         message.setText("Your hire details:\n" +
                 "Name: " + model.getName() + "\n" +
                 "Model: " + model.getModel() + "\n" +
@@ -54,7 +57,8 @@ public class EmailService {
                 "Plate: " + model.getPlate() + "\n" +
                 "Rent Date: " + model.getRentDate() + "\n" +
                 "Return Date: " + model.getReturnDate() + "\n" +
-                "Total Price: ₺" + model.getTotalPrice());
+                "Total Price: ₺" + model.getTotalPrice()+ "\n" +
+                "Car image " + model.getImageUrl());
         mailSender.send(message);
     }
 
