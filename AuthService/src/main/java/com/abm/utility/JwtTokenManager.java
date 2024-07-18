@@ -3,6 +3,7 @@ package com.abm.utility;
 
 import com.abm.entity.Auth;
 import com.abm.exception.AuthServiceException;
+import com.abm.exception.ErrorType;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -28,9 +29,6 @@ public class JwtTokenManager {
     String issuer;
     Long expireTime=1000L*60*60;
 
-
-
-    //1. token üretmeli
     public Optional<String> createToken(Auth auth){
         String token="";
 
@@ -54,54 +52,159 @@ public class JwtTokenManager {
     }
     //2. token dpğrulanmalı
 
-//Bakmak lazım
+    //Bakmak lazım
     public boolean verifyToken(DecodedJWT decodedJWT){
         return false;
     }
 
+    //1. Token uretmeli
+    public Optional<String> createToken(String id) {
+        String token = "";
+        try {
+            token = JWT.create()
+                    .withClaim("id", id)
+                    .withClaim("whichpage", "AdminService")
+                    .withClaim("class", "Java JWT")
+                    .withClaim("group", "carrental")
+                    .withIssuer("car rental")
+                    .withIssuedAt(new Date()) // Tokenin yaratildigi an
+                    .withExpiresAt(new Date(System.currentTimeMillis() + expireTime))
+                    .sign(Algorithm.HMAC512(secretKey));
+            return Optional.of(token);
+        } catch (IllegalArgumentException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_CREATION_FAILED);
+        } catch (JWTCreationException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_CREATION_FAILED);
+        }
+
+    }
+
+/*public Optional<String> createDoubleToken(Long id, Role role){
+        String doubleToken = "";
+        try {
+            doubleToken = JWT.create()
+                    .withClaim("id", id)
+                    .withClaim("role", role.toString())
+                    .withClaim("whichpage", "AuthMicroService")
+                    .withClaim("ders", "Java JWT")
+                    .withClaim("group", "Java14")
+                    .withIssuer("Java14")
+                    .withIssuedAt(new Date()) // Tokenin yaratildigi an
+                    .withExpiresAt(new Date(System.currentTimeMillis() + expireTime))
+                    .sign(Algorithm.HMAC512(secretKey));
+            return Optional.of(doubleToken);
+        } catch (IllegalArgumentException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_CREATION_FAILED);
+        } catch (JWTCreationException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_CREATION_FAILED);
+        }
+
+    }*/
 
 
+    //2. Token Dogrulanmali
+//    public Optional<Long> verifyToken(String token) {
+//        try {
+//            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+//            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
+//            DecodedJWT decodedJWT = verifier.verify(token);
+//
+//            if (decodedJWT==null) {
+//                return Optional.empty();
+//            }
+//            Long id = decodedJWT.getClaim("id").asLong();
+//
+//            return Optional.of(id);
+//
+//        } catch (IllegalArgumentException e) {
+//            throw new AuthServiceException((ErrorType.TOKEN_ARGUMENT_NOTVALID));
+//        } catch (JWTVerificationException e) {
+//            throw new AuthServiceException(ErrorType.TOKEN_VERIFY_FAILED);
+//        }
+//
+//    }
 
-    //3. tokendan bilgi çıkarımı yapılmalı
-    public Optional<Long> getAuthIdFromToken(String token){
-        DecodedJWT decodedJWT = null;
+    //3 Tokendan bilgi cakirimi yapmali
+    public Optional<String> getIdFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
-            decodedJWT = verifier.verify(token);
+            DecodedJWT decodedJWT = verifier.verify(token);
 
-            if(decodedJWT==null){
+            if (decodedJWT == null) {
                 return Optional.empty();
-            } else {
-                return Optional.of(decodedJWT.getClaim("id").asLong());
             }
+            String id = decodedJWT.getClaim("id").asString();
+
+            return Optional.of(id);
 
         } catch (IllegalArgumentException e) {
-            throw new AuthServiceException(TOKEN_FORMAT_NOT_ACCEPTABLE);
+            throw new AuthServiceException((ErrorType.TOKEN_ARGUMENT_NOTVALID));
         } catch (JWTVerificationException e) {
-            throw new AuthServiceException(TOKEN_VERIFY_FAILED);
+            throw new AuthServiceException(ErrorType.TOKEN_VERIFY_FAILED);
         }
     }
-
-    public Optional<String> getAuthRoleFromToken(String token){
-        DecodedJWT decodedJWT = null;
+    public Optional<String> getNameFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
-            decodedJWT = verifier.verify(token);
+            DecodedJWT decodedJWT = verifier.verify(token);
 
-            if(decodedJWT==null){
+            if (decodedJWT == null) {
                 return Optional.empty();
-            } else {
-                return Optional.of(decodedJWT.getClaim("authRole").asString());
             }
+            String name = decodedJWT.getClaim("name").asString();
+
+            return Optional.of(name);
 
         } catch (IllegalArgumentException e) {
-            throw new AuthServiceException(TOKEN_FORMAT_NOT_ACCEPTABLE);
+            throw new AuthServiceException((ErrorType.TOKEN_ARGUMENT_NOTVALID));
         } catch (JWTVerificationException e) {
-            throw new AuthServiceException(TOKEN_VERIFY_FAILED);
+            throw new AuthServiceException(ErrorType.TOKEN_VERIFY_FAILED);
+        }
+    }
+    public Optional<String> getPasswordFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+
+            if (decodedJWT == null) {
+                return Optional.empty();
+            }
+            String password = decodedJWT.getClaim("password").asString();
+
+            return Optional.of(password);
+
+        } catch (IllegalArgumentException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_ARGUMENT_NOTVALID);
+        } catch (JWTVerificationException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_VERIFY_FAILED);
         }
     }
 
+
+
+    public Optional<String> getRoleFromToken(String token){
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+
+            if (decodedJWT==null) {
+                return Optional.empty();
+            }
+            String role = decodedJWT.getClaim("role").asString();
+
+            return Optional.of(role);
+
+        } catch (IllegalArgumentException e) {
+            throw new AuthServiceException((ErrorType.TOKEN_ARGUMENT_NOTVALID));
+        } catch (JWTVerificationException e) {
+            throw new AuthServiceException(ErrorType.TOKEN_VERIFY_FAILED);
+        }
+    }
 
 }
+
+

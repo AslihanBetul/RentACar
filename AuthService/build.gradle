@@ -6,4 +6,5 @@ dependencies {
     runtimeOnly libs.postgresql
     implementation libs.springCloudConfigClient
    implementation libs.springCloudAmqp
+
 }

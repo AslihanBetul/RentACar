@@ -35,7 +35,8 @@ public enum ErrorType {
     EMAIL_OR_PASSWORD_WRONG(1025, "Email veya şifre yanlış", HttpStatus.BAD_REQUEST),
     EMAIL_NOT_FOUND(1026, "Email bulunamadı", HttpStatus.BAD_REQUEST),
     REPASSWORDCODE_OR_EMAIL_WRONG(1027, "repassword kodu ya da email geçersiz", HttpStatus.BAD_REQUEST ),
-    CAR_ALREADY_RENTED(1028, "car already rented",HttpStatus.BAD_REQUEST );
+    CAR_ALREADY_RENTED(1028, "car already rented",HttpStatus.BAD_REQUEST ),
+    INVALID_DATE(1029,"invalid date" , HttpStatus.BAD_REQUEST);
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

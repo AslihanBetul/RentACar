@@ -29,4 +29,10 @@ public class RentController {
         return ResponseEntity.ok(rentService.listAllRentCarFindById(token));
 
     }
+    @PutMapping("/updateCarStatus")
+    public ResponseEntity<Void>updateCarStatus(){
+        rentService.rentCheck();
+        return ResponseEntity.ok().build();
+    }
+
 }

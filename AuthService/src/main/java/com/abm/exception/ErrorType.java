@@ -34,7 +34,12 @@ public enum ErrorType {
     ACCOUNT_CREATION_FAILED(1024, "Hesap oluşturulurken hata oluştu. Lütfen tekrar deneyin.", HttpStatus.SERVICE_UNAVAILABLE),
     EMAIL_OR_PASSWORD_WRONG(1025, "Email veya şifre yanlış", HttpStatus.BAD_REQUEST),
     EMAIL_NOT_FOUND(1026, "Email bulunamadı", HttpStatus.BAD_REQUEST),
-    REPASSWORDCODE_OR_EMAIL_WRONG(1027, "repassword kodu ya da email geçersiz", HttpStatus.BAD_REQUEST );
+
+    REPASSWORDCODE_OR_EMAIL_WRONG(1027, "repassword kodu ya da email geçersiz", HttpStatus.BAD_REQUEST ),
+    TOKEN_ARGUMENT_NOTVALID(1028, "token argument notvalid", HttpStatus.BAD_REQUEST ),
+    INVALID_UNAUTHORIZED(1029, "invalid unauthorized", HttpStatus.BAD_REQUEST);
+
+
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

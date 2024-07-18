@@ -8,6 +8,7 @@ import com.abm.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import static com.abm.constant.EndPoints.*;
@@ -20,6 +21,7 @@ public class AuthController {
 
     @PostMapping(REGISTER)
     @CrossOrigin("*")
+
     public ResponseEntity<String>register(@RequestBody AuthRegisterDto authRegisterDto){
         return ResponseEntity.ok(authService.register(authRegisterDto));
     }
@@ -30,6 +32,7 @@ public class AuthController {
     }
     @PostMapping(LOGIN)
     @CrossOrigin("*")
+
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
         return ResponseEntity.ok(authService.login(loginRequestDto));
     }
