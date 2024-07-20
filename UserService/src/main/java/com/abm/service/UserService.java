@@ -59,4 +59,13 @@ public class UserService {
     user.setLastname(userDto.getLastname());
     userRepository.save(user);
     }
+
+    public List<String > listallMail(){
+    List<User> all = userRepository.findAll();
+    List<String> list = new ArrayList<>();
+    all.forEach(user -> list.add(user.getEmail()));
+    return list;
+    }
+
+
 }

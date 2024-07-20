@@ -18,6 +18,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -149,6 +150,9 @@ public class RentService {
         long period = 30;
         scheduler.scheduleAtFixedRate(minuteTask, initialDelay, period, TimeUnit.SECONDS);
     }
+
+
+
 
 
     }

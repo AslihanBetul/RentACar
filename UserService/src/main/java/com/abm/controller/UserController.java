@@ -40,6 +40,11 @@ public class UserController {
         return ResponseEntity.ok("User updated successfully");
     }
 
+    @GetMapping("/listallMail")
+    public List<String> listAllMail(){
+        return userService.listallMail();
+    }
+
 
 
 }

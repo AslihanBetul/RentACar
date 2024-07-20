@@ -15,6 +15,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -68,6 +70,8 @@ public class EmailService {
                 "                        </ul>\n" +
                 "                        <ul style=\"font-family:Arial,sans-serif;color:#000000;font-size:14px;line-height:17px;margin-top:10px;margin-bottom:0\">\n" +
                 "                            <li style=\"font-family:Arial,sans-serif;color:#000000;font-size:14px;line-height:17px;margin-top:0;margin-bottom:5px\">\n" +
+
+                 "             <img style=\"width: 500px;\" src=\" https://www.altexsoft.com/static/blog-post-featured/2023/10/4fae8217-b4ac-49b4-b02a-91c243524301.jpg"  +
                 "                                <b>Name: </b>" + model.getName() + "<br>\n" +
                 "                                <b>Model: </b>" + model.getModel() + "<br>\n" +
                 "                                <b>Brand: </b>" + model.getBrand() + "<br>\n" +
@@ -101,6 +105,26 @@ public class EmailService {
 
 
 
+
+
+
+    }
+
+    public void sendBulkHtmlEmail() throws MessagingException {
+
+        String subject = "Büyük İndirim Kampanyası!";
+        String text = "<html><body>" +
+                "<h1>Merhaba!</h1>" +
+                "<p>Büyük indirim kampanyamıza hoş geldiniz. Şimdi %50'ye varan indirimlerden yararlanabilirsiniz!</p>" +
+                "<img style=\"width: 500px;\" src =\"https://www.altexsoft.com/static/blog-post-featured/2023/10/4fae8217-b4ac-49b4-b02a-91c243524301.jpg\" alt=\"Discount Image\" />" +
+                "</body></html>";
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        helper.setText(text, true);
+        helper.setTo( userManager.listAllMail().toArray(new String[0]));
+        helper.setSubject(subject);
+        mailSender.send(mimeMessage);
     }
 
 

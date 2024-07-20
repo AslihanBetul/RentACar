@@ -17,6 +17,7 @@ public class Config {
     private final String queueUserSave = "queueUserSave";
     private final String keyUserSave = "keyUserSave";
 
+
     @Bean
     public DirectExchange directExchange() {
         return new DirectExchange(directExchange);
