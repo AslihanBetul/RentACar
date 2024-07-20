@@ -19,3 +19,9 @@ authservice:
   secret:
     secret-key: ${JAVA14_SECRET_KEY}
     issuer: ${JAVA14_ISSUER}
+
+redis:
+  host: localhost
+  port: 6379
+
+

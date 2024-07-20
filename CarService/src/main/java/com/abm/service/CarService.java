@@ -6,7 +6,9 @@ import com.abm.entity.Car;
 import com.abm.entity.CarStatus;
 import com.abm.repository.CarRepository;
 import com.abm.request.CarSaveDto;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +18,8 @@ import java.util.List;
 @Service
 public class CarService {
     private final CarRepository carRepository;
-
+    private final RedisTemplate<String, Car> redisTemplate;
+    private static  final String KEY="CarList";
 
     public String save(CarSaveDto dto) {
         Car car = Car.builder()
@@ -31,6 +34,7 @@ public class CarService {
                 .imageUrl(dto.getImageUrl())
                 .build();
         carRepository.save(car);
+        redisTemplate.opsForList().rightPush(KEY,car);
         return "Car saved";
     }
     public String save(Car car){
@@ -71,7 +75,9 @@ public class CarService {
                    .carStatus(car.getCarStatus())
                    .build();
             carList.add(carResponseDto);
+
         });
+
 
         return  carList;
 
@@ -80,13 +86,7 @@ public class CarService {
     public List<CarResponseDto> listAllAvailableCar(CarStatus status) {
         return listAllCar().stream().filter(car -> car.getCarStatus() == status).toList();
 
-        // List<CarResponseDto> carList = new ArrayList<>();
 
-//     listAllCar().forEach(car ->{
-//         if(car.getCarStatus() == status){
-//             carList.add(car);
-//         }
-//     } );
 
 
     }
@@ -97,4 +97,23 @@ public class CarService {
 
 
     }
+
+    @PostConstruct
+    private void init(){
+        if (!redisTemplate.hasKey(KEY) )
+        {
+            List<Car> allCars = carRepository.findAll();
+            allCars.forEach(car -> {
+                redisTemplate.opsForList().rightPush(KEY,car);
+            });
+        }
+    }
+
+
+    public List<Car> findAllCache() {
+        return  redisTemplate.opsForList().range(KEY, 0, -1);
+
+    }
+
+
 }

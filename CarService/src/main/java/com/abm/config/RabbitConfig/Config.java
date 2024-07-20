@@ -1,4 +1,4 @@
-package com.abm.config;
+package com.abm.config.RabbitConfig;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
